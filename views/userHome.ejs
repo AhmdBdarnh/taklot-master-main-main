@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../style/st.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Big Card with Request and Offers</title>
+</head>
+<body>
+    <header>
+        <img src="/images/image 1.png"> 
+    </header>
+    <div class="container">
+        <div class="big-card">
+            <% requests.forEach(request => { %>
+                <section class="request-section">
+                    <h2>Request Details</h2>
+                    <div class="request-details">
+                        <img src="data:<%= request.image.contentType %>;base64,<%= request.image.image.toString('base64') %>" alt="Client Image">
+                        <% if (userData != null) { %>
+                            <div class="detail">Name: <%= userData.fullName %></div>
+                            <div class="detail">Phone Number: <%= userData.phoneNumber %></div>
+                        <% } %>
+                        
+                        <div class="detail"><%= request.details %></div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn-update">Update</button>
+                        <button class="btn-delete">Delete</button>
+                    </div>
+                </section>
+            <% }) %>
+            <!-- <section class="offers-section">
+                <h2>Offers from Technical</h2>
+                <div class="offer">
+                    <div class="title">Technical Name 1</div>
+                    <div class="info">
+                        <div class="bit">Price: $100</div>
+                        <div class="phone">Contact: 987-654-3210</div>
+                    </div>
+                    <div class="offer-buttons">
+                        <button class="btn-accept">Accept</button>
+                        <button class="btn-ignore">Ignore</button>
+                    </div>
+                </div>
+            </section> -->
+            <button id="btn-add-request" class="btn-add-request">Add Request</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("btn-add-request").addEventListener("click", function() {
+            window.location.href = "/home/request";
+        });
+    </script>
+</body>
+</html>
