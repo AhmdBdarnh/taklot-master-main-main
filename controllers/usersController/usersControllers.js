@@ -65,7 +65,7 @@ const getSignup = async (req, res) => {
 
 const getLogin = async (req, res) => {
   try {
-    res.render('login');
+    res.render('pages-login');
   } catch (err) {
     return res.status(err?.status || 500).json({ message: err.message });
   }
@@ -87,6 +87,7 @@ const post_Login = async (req, res) => {
       }
     } else {
       saveParameter('helpseekerID', `${user.userId}`);
+
       res.redirect('/home/helpseeker');
     }
   } catch (err) {
@@ -98,16 +99,26 @@ const post_Login = async (req, res) => {
 
 const getUserPage = async (req, res) => {
   try {
-    const helpseekerId = getParameter('helpseekerID');
-    const userData = await userRepository.getName_Number(helpseekerId);
-    const requests = await reqRepository.getRequestByUserID(helpseekerId);
-
-    return res.render('userHome',{userData,requests});
+     res.render('index');
   }
   catch (err) {
     return res.status(err?.status || 500).json({ message: err.message });
   }
 }
+
+
+const getRequests = async (req, res) => {
+  try {
+    const helpseekerId = getParameter('helpseekerID');
+    const userData = await userRepository.getName_Number(helpseekerId);
+    const requests = await reqRepository.getRequestByUserID(helpseekerId);
+     res.render('components-cards',{userData,requests});
+  }
+  catch (err) {
+    return res.status(err?.status || 500).json({ message: err.message });
+  }
+}
+
 
 
 
@@ -177,7 +188,6 @@ module.exports = {
   getName_Number,
   getUserPage,
   saveParameter,
-  getParameter
-
-
+  getParameter,
+  getRequests
 };

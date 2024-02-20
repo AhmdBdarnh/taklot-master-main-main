@@ -31,11 +31,11 @@ const getSignup = async (req, res) => {
 // get Technical page
 const getTechPage = async (req, res) => {
   try {
-    const technicalID = getParameter('technicalId');
-    const request = await getOffers(technicalID);
+    // const technicalID = getParameter('technicalId');
+    // const request = await getOffers(technicalID);
     // const helpseekersId = await 
     // const userData = await userRepository.getName_Number(helpseekerId);
-    // res.render('technical',{request,userData});
+    res.render('index');
   } 
   catch (err) {
     res.status(err?.status || 500).json({ message: err.message });

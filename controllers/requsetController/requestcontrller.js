@@ -162,7 +162,7 @@ const req_delete = async (req, res) => {
 
     const deletedReq = await reqRepository.deleteReq(id);
     if (!deletedReq || deletedReq.length === 0) throw new NotFoundError('Request');
-    return res.status(200).send(deletedReq);
+      res.redirect('/home/helpseeker/requests');
   } 
   catch (err) {
     return res.status(err?.status || 500).json({ message: err.message });
