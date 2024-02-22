@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stylish Login Page</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #e9ecef;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    .login-container {
+        background: #ffffff;
+        padding: 40px 60px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+    }
+    .login-container h2 {
+        margin-bottom: 20px;
+        font-size: 24px;
+        color: #333;
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+    }
+    input[type="text"],
+    input[type="password"] {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: none;
+        border-bottom: 2px solid #5cb85c;
+        outline: none;
+        font-size: 16px;
+    }
+    input[type="submit"] {
+        padding: 15px;
+        background: #5cb85c;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+    input[type="submit"]:hover {
+        background: #4cae4c;
+    }
+    .signup-link {
+        margin-top: 20px;
+    }
+    .signup-link a {
+        text-decoration: none;
+        color: #5cb85c;
+        font-size: 14px;
+    }
+</style>
+</head>
+<body>
+
+<div class="login-container">
+    <h2>Welcome Back!</h2>
+    <form action="/login" method="post">
+        <input type="text" id="userName" name="userName" placeholder="Username" required>
+        <input type="password" id="password" name="password" placeholder="Password" required>
+        <input type="submit" value="Login">
+    </form>
+    <div class="signup-link">
+        New here? <a href="/signup">Create an account</a>
+    </div>
+</div>
+
+</body>
+</html>
