@@ -72,6 +72,15 @@ const getLogin = async (req, res) => {
 };
 
 
+const getProfile =async (req, res) => {
+  try {
+    res.render('profile');
+  } catch (err) {
+    return res.status(err?.status || 500).json({ message: err.message });
+  }
+};
+
+
 const post_Login = async (req, res) => {
   try {
     const { userName, password } = req.body;
@@ -189,5 +198,6 @@ module.exports = {
   getUserPage,
   saveParameter,
   getParameter,
-  getRequests
+  getRequests,
+  getProfile
 };
