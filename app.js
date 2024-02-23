@@ -7,7 +7,6 @@ const offerRout = require('./router/offerRouter/offer');
 const homeRout = require('./router/homePageRouter/home');
 const feedbackRout = require('./router/feedbackRouter/feedback');
 const singupRout = require('./router/signup/signup');
-
 // const session = require('express-session');
 
 
