@@ -16,6 +16,26 @@ const deleteOffer = async (req, res) => {
   }
 };
 
+const getofferspage = async (req, res) => {
+  try {
+      res.render('offerspage');
+  } 
+  catch (err) {
+    return res.status(err?.status || 500).json({ message: err.message });
+  }
+};
+
+const gettechincalprofile = async (req, res) => {
+  try {
+      res.render('techincalprofile');
+  } 
+  catch (err) {
+    return res.status(err?.status || 500).json({ message: err.message });
+  }
+};
+
+
+
 
 // get signup page
 const getSignup = async (req, res) => {
@@ -143,5 +163,7 @@ module.exports = {
     getTechPage,
     getOffers,
     deleteOffer,
-    getSignup
+    getSignup,
+    getofferspage,
+    gettechincalprofile
 };
