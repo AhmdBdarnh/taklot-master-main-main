@@ -19,6 +19,10 @@ router.get("/home/helpseeker", userController.getUserPage);
 router.get("/home/helpseeker/requests", userController.getRequests);
 
 
+router.get("/home/Profile", userController.getProfile);
+
+
+
 
 
 module.exports = router;
