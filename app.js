@@ -7,10 +7,6 @@ const offerRout = require('./router/offerRouter/offer');
 const homeRout = require('./router/homePageRouter/home');
 const feedbackRout = require('./router/feedbackRouter/feedback');
 const singupRout = require('./router/signup/signup');
-<<<<<<< HEAD
-=======
-
->>>>>>> ebraheem
 // const session = require('express-session');
 
 
@@ -53,9 +49,5 @@ connectDB();
 
 
 app.listen(port, () => {
-<<<<<<< HEAD
-  console.log(`http://localhost:${port}/`);
-=======
   console.log(`http://localhost:${port}/login`);
->>>>>>> ebraheem
 });

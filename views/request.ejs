@@ -240,13 +240,15 @@
         </ol>
       </nav>
     </div><!-- End Page Title -->
+
+    
+    <% if (userData != null && requests != null) { %>
    
     <section class="section" >
 
       <% requests.forEach(request => { %>
-        <input type="text" name="requestID" value="<%= request._id %>" style="display: none;">
         <div class="col-lg-3">
-          <!-- Card with titles, buttons, and links -->
+          <!-- Request Card with photo, buttons, and details -->
           <div class="card"  >
             <div class="card-body">
               <section class="request-section">
@@ -260,20 +262,37 @@
                     
                     <div class="detail"><%= request.details %></div>
                 </div>
-                <div class="action-buttons">
+
+              <section style="display: flex;">
+                              <!-- update button -->
+                <form action="/request/update" method="post">
+                  <div class="action-buttons">
+                    <input type="text" name="requestID" value="<%= request._id %>" style="display: none;">
                     <button class="btn-update">Update</button>
-                    <button class="btn-delete">Delete</button>
-                </div>
+                  </div>
+                </form>
+                              <!-- delete button -->
+
+                <form action="/request/delete" method="post">
+                  <div class="action-buttons">
+                    <input type="text" name="requestID" value="<%= request._id %>" style="display: none;">
+                    <button  class="btn-delete" >Delete</button>
+                   </div>
+                </form>
+                              <!-- END buttons -->
+                      
+              </section>
+
             </section>
             </div>
-          </div><!-- End Card with titles, buttons, and links -->
+          </div><!-- Request Card with photo, buttons, and details -->
         </div>
         <% }) %>
         
 
     </section>
 
-
+    <% } %>
 
 
 

@@ -7,8 +7,9 @@ const upload = require('../../middleware/upload');
 router.get("/request/:id", reqController.getReqByID);
 router.get("/request", reqController.getAllReq);
 router.post("/request", reqController.request_post);
-router.put("/request/:id", reqController.req_update);
-router.delete("/request/delete/:id", reqController.req_delete);
+router.post("/request/update", reqController.req_update);
+router.post("/request/delete", reqController.req_delete);
+
 
 
 router.get("/home/request", reqController.getReqPage);
