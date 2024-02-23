@@ -13,4 +13,13 @@ router.get("/home/technical", technicalController.getTechPage);
 router.get("/signup/technical",technicalController.getSignup);
 router.post("/signup/technical", technicalController.techincal_post);
 
+router.get("/home/offers",technicalController.getofferspage);
+
+router.get("/home/techincal_profile",technicalController.gettechincalprofile);
+
+
+
+
+
+
 module.exports = router;

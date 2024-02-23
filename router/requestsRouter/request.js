@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const reqController = require('../../controllers/requsetController/requestcontrller');
-const uploadMiddleware = require('../../middleware/upload'); 
+const uploadMiddleware = require('../../Middleware/img'); 
 
 // request routes
 router.get("/request/:id", reqController.getReqByID);
