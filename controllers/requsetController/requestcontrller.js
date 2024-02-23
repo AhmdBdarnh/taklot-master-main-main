@@ -58,7 +58,11 @@ const renderUploadForm = async (req, res) => {
       const latestImage = await req.findOne({ filename: imageName }).sort({ _id: -1 });
 
       // Render the upload form along with the latest image data
+<<<<<<< HEAD
       res.render('upload', { latestImage: latestImage });
+=======
+      res.render('formpip', { latestImage: latestImage });
+>>>>>>> ebraheem
   } catch (err) {
       console.error(err);
       res.status(500).send('Error retrieving image');
@@ -92,7 +96,11 @@ const renderUploadForm = async (req, res) => {
 const getReqPage = async (req, res) => {
   try {
     const helpseekerID = getParameter("helpseekerID");
+<<<<<<< HEAD
     res.render('add_request',{helpseekerID});
+=======
+    res.render('requestform',{helpseekerID});
+>>>>>>> ebraheem
 } 
 catch (err) {
   return res.status(err?.status || 500).json({ message: err.message });
@@ -103,6 +111,7 @@ catch (err) {
 
 
 
+<<<<<<< HEAD
 
 
 // // add new request to db
@@ -127,6 +136,8 @@ catch (err) {
 //   }
 // };
 
+=======
+>>>>>>> ebraheem
 // get all request in db
 const getReqByID = async (req, res) => {
   try {

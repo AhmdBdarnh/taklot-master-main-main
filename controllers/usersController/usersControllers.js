@@ -112,7 +112,11 @@ const getRequests = async (req, res) => {
     const helpseekerId = getParameter('helpseekerID');
     const userData = await userRepository.getName_Number(helpseekerId);
     const requests = await reqRepository.getRequestByUserID(helpseekerId);
+<<<<<<< HEAD
      res.render('components-cards',{userData,requests});
+=======
+     res.render('request',{userData,requests});
+>>>>>>> ebraheem
   }
   catch (err) {
     return res.status(err?.status || 500).json({ message: err.message });

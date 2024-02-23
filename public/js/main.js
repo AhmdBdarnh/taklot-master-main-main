@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
 * Template Name: NiceAdmin
 * Updated: Jan 29 2024 with Bootstrap v5.3.2
@@ -5,6 +6,8 @@
 * Author: BootstrapMade.com
 * License: https://bootstrapmade.com/license/
 */
+=======
+>>>>>>> ebraheem
 (function() {
   "use strict";
 
