@@ -1,13 +1,17 @@
 const reqRepository = require('../../repository/requestRepostiory/requesRepos');
 const { NotFoundError, BadRequsetError } = require('../../errors/err');
 const req = require('../../module/reuqestsSchema/request');
+const multer = require('multer');
 const technicalRep = require('../../repository/technicalReoistory/technicalRepos');
 const offerRep = require('../../repository/offerRepository/offerRepos');
 const {getParameter} = require('../usersController/usersControllers');
 
 
 
+// Add middleware for file upload
+const upload = multer({ dest: 'uploads/' });
 
+// Your other controller methods...
 
 // Controller method for uploading image
 const request_post = async (req, res) => {
@@ -64,6 +68,29 @@ try {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// add new request to db
 const getReqPage = async (req, res) => {
   try {
     const helpseekerID = getParameter("helpseekerID");
@@ -102,7 +129,6 @@ const req_update = async (req, res) => {
     return res.status(err?.status || 500).json({ message: err.message });
   }
 };
-
 
 
 // delete request
