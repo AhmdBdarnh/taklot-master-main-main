@@ -11,16 +11,17 @@ const {getParameter} = require('../usersController/usersControllers');
 // Add middleware for file upload
 const upload = multer({ dest: 'uploads/' });
 
-// Your other controller methods...
 
 // Controller method for uploading image
 const request_post = async (req, res) => {
   try {
+    const req_id = req.body.req_id;
+    if (req_id) {
+      req_delete_byId(req_id);
+   }
   const helpseekerId = getParameter('helpseekerID');
     const category = req.body.category;
     const details = req.body.details;
-
-    
       // Save the image to the database using the repository
       const newReq = await reqRepository.addReq({
         helpseekerId,
@@ -41,12 +42,11 @@ const request_post = async (req, res) => {
           
       }
       res.redirect('/home/helpseeker');
-
-
-    } catch (err) {
+    } 
+    catch (err) {
       console.error(err);
       res.status(500).send('Error uploading image');
-  }
+    }
 };
 
 const renderUploadForm = async (req, res) => {
@@ -67,34 +67,10 @@ try {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // add new request to db
 const getReqPage = async (req, res) => {
   try {
-    const helpseekerID = getParameter("helpseekerID");
-    res.render('requestform',{helpseekerID});
+    res.render('requestform');
 } 
 catch (err) {
   return res.status(err?.status || 500).json({ message: err.message });
@@ -122,8 +98,8 @@ const getReqByID = async (req, res) => {
 // update request
 const req_update = async (req, res) => {
   try {
-    const _id = req.body.requestID; 
-    return res.status(200).send("updatedReq");
+    const requestID = req.body.requestID;
+    res.render('requestform',{requestID});
   } 
   catch (err) {
     return res.status(err?.status || 500).json({ message: err.message });
@@ -138,10 +114,26 @@ const req_delete = async (req, res) => {
 
     const deletedReq = await reqRepository.deleteReq(requestId);
     if (!deletedReq || deletedReq.length === 0) throw new NotFoundError('Request');
-      res.redirect('/home/helpseeker/requests');
+    const deleteOffer = await offerRep.deleteOfferbyReqId(requestId);
+    if (!deleteOffer || deleteOffer.length === 0) throw new NotFoundError('Request in offers');
+    res.redirect('/home/helpseeker/requests');
   } 
   catch (err) {
     return res.status(err?.status || 500).json({ message: err.message });
+  }
+};
+
+
+// delete request by send id
+const req_delete_byId = async (reqId) => {
+  try {
+    const deletedReq = await reqRepository.deleteReq(reqId);
+    if (!deletedReq) throw new NotFoundError('Request');
+    const deleteOffer = await offerRep.deleteOfferbyReqId(reqId);
+    if (!deleteOffer) throw new NotFoundError('Request in offers');
+  } catch (err) {
+    console.error(err);
+    throw err; // Rethrow the error to be caught in the calling function
   }
 };
 

@@ -63,6 +63,17 @@ const getOffersByTechID = async technicalID => {
 };
 
 
+const deleteOfferbyReqId = async requestID => {
+    try {
+        const offers = await Offer.deleteMany({ requestID });
+        console.log(offers);
+        return true;
+    } 
+    catch {
+        return false;
+    }
+};
+
 
 
 
@@ -72,5 +83,6 @@ module.exports = {
     udpateOffer,
     deleteOffer,
     gettAllOffer,
-    getOffersByTechID
+    getOffersByTechID,
+    deleteOfferbyReqId
 };
