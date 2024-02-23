@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const reqController = require('../../controllers/requsetController/requestcontrller');
-const uploadMiddleware = require('../../middleware/upload'); // Renamed to uploadMiddleware to avoid conflict
+const uploadMiddleware = require('../../middleware/upload'); 
 
 // request routes
 router.get("/request/:id", reqController.getReqByID);
@@ -10,8 +10,8 @@ router.post("/request", reqController.request_post);
 router.post("/request/update", reqController.req_update);
 router.post("/request/delete", reqController.req_delete);
 
-// home routes
+// home request routes
 router.get("/home/request", reqController.getReqPage);
-router.post("/home/request", uploadMiddleware.single('image'), reqController.request_post); // Use uploadMiddleware instead of upload
+router.post("/home/request", uploadMiddleware.single('image'), reqController.request_post);
 
 module.exports = router;
