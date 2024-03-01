@@ -227,6 +227,7 @@
     <div class="row">
         <% offers.forEach(offer => { %>
               <% const offerRequestID = offer.requestID.toString(); %>
+              <% const offer_id = offer._id.toString(); %>
               <% const request = requestUser.find(request => request._id.toString() === offerRequestID); %>
             <% if (request) { %>
                 <!-- Display request details -->
@@ -237,8 +238,15 @@
                             <h5 class="card-title">Homeowner: <%= helpseekers.find(helpseeker => helpseeker.id === request.helpseekerId).fullName %></h5>
                             <p class="card-text">Bid: <%= offer.bid %></p>
                             <p class="card-text">Status: <%= offer.status %></p>
+                            <div class="button-group">
+
                             <button class="btn btn-primary mr-2" onclick="openUpdateModal()">Update</button>
-                            <button class="btn btn-danger">Delete</button>
+                            <form action="/deleteOffer" method="post">
+                              <input type="hidden" name="offerID" value="<%= offer_id %>" />
+                              <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                           </div>
+
                         </div>
                     </div>
                 </div>

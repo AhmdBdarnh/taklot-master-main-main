@@ -25,10 +25,7 @@ const addOffer = async (req, res) => {
     const { requestID, bid, comments } = req.body;
     const new_Offer = await offerRepository.addOffer(requestID,technicalID, bid, comments);
     if (!new_Offer) throw new BadRequsetError(`Technical implement is not true`);
-    
-
     res.redirect('offers');
-
   } 
   catch (err) {
     res.status(err?.status || 500).json({ message: err.message });
@@ -61,8 +58,10 @@ const update_offer = async (req, res) => {
 
 const deleteOffer = async (req, res) => {
   try {
-    const { requestID, technicalID } = req.body;
-    await offerRepository.deleteOffer({ requestID, technicalID });
+    const { offerID } = req.body;
+    const deletedReq = await offerRepository.deleteOffer(offerID);
+    if (!deletedReq) throw new BadRequsetError(`error delete offer`);
+    res.redirect('/tech/offers');
   } catch (error) {
     throw error;
   }
