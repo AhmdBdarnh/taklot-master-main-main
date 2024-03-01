@@ -37,6 +37,15 @@ const technicalSchema = new mongoose.Schema({
       type: String,
       required: true
     },
+    email: {
+      type: String,
+      required: true,
+      unique: true, // Ensure no two technicals have the same email
+      match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address'] // Simple regex for email validation
+    },
+    notification:{
+      type: Array
+    }
     
   });
   

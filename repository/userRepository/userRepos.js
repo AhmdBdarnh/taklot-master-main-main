@@ -1,8 +1,8 @@
 const User = require('../../module/helpSekeerSchema/helpseeker');
 
-const getUserByID = async userId => {
+const getUserByID = async (id) => {
     try {
-        const user = await User.findById(userId);
+        const user = await User.findById(id);
         return user;
     } 
     catch{
@@ -89,6 +89,21 @@ const getName_Number = async _id => {
 
 
 
+async function getUserFullName(userId) {
+    try {
+        const user = await User.findById(userId).exec(); // Use User model to find user by ID
+        if (!user) {
+            console.log('User not found');
+            return null; // Or throw an error depending on your error handling strategy
+        }
+        return user.fullName; // Return the full name of the user
+    } catch (error) {
+        console.error('Error fetching user:', error);
+        throw error; // Or handle it more gracefully depending on your application's needs
+    }
+}
+
+
 
 
 module.exports = {
@@ -99,4 +114,5 @@ module.exports = {
     gettAllUsers,
     checkUser,
     getName_Number,
+    getUserFullName
 };
