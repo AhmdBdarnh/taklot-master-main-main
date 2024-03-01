@@ -16,7 +16,6 @@ const offerSchema = new mongoose.Schema({
       },
       comments: {
         type: String,
-        required: false
       },
       status: {
         type: String,

@@ -2,9 +2,61 @@ const techRepository = require('../../repository/technicalReoistory/technicalRep
 const offerRepository = require('../../repository/offerRepository/offerRepos');
 const requestRepository = require('../../repository/requestRepostiory/requesRepos');
 const userRepository = require('../../repository/userRepository/userRepos');
-
+const techReqRepository = require('../../repository/techRequestRepo/techRequestRepos');
 const {saveParameter,getParameter} = require('../usersController/usersControllers');
 const { NotFoundError, BadRequsetError } = require('../../errors/err');
+
+
+const getOffersPage = async (req, res) => {
+  try {
+    const technicalID = getParameter('technicalId');
+    const {requestTech,helpseekers,requestUser,offers} = await techReqRepository.getData(technicalID);
+    res.render('techOffersPage',{requestTech,helpseekers,requestUser,offers});
+  } 
+  catch (err) {
+    res.status(err?.status || 500).json({ message: err.message });
+  }
+};
+
+// add new offer 
+const addOffer = async (req, res) => {
+  try {
+    const technicalID = getParameter('technicalId');
+    const { requestID, bid, comments } = req.body;
+    const new_Offer = await offerRepository.addOffer(requestID,technicalID, bid, comments);
+    if (!new_Offer) throw new BadRequsetError(`Technical implement is not true`);
+    
+
+    res.redirect('offers');
+
+  } 
+  catch (err) {
+    res.status(err?.status || 500).json({ message: err.message });
+  }
+};
+
+
+// update offer
+const update_offer = async (req, res) => {
+  try {
+    const technicalID = getParameter('technicalId');
+    const { offerID, bid, comments } = req.body;
+    const new_Offer = await offerRepository.udpateOffer(offerID,{bid, comments});
+    if (!new_Offer) throw new BadRequsetError(`Technical implement is not true`);
+    res.redirect('offers');
+
+  } 
+  catch (err) {
+    res.status(err?.status || 500).json({ message: err.message });
+  }
+};
+
+
+
+
+
+
+
 
 
 const deleteOffer = async (req, res) => {
@@ -16,9 +68,16 @@ const deleteOffer = async (req, res) => {
   }
 };
 
-const getofferspage = async (req, res) => {
-  try {
-      res.render('offerspage');
+const getrequestspage = async (req, res) => {
+  try {                                                              
+      const technicalID = getParameter('technicalId');
+      const tech_request = await techReqRepository.getReqById(technicalID);
+      const requests = await requestRepository.gettAllReq(tech_request.requestID);
+      const helpseekerPromises = requests.map(request => {
+        return userRepository.getUserByID(request.helpseekerId);
+      });
+      const helpseekers = await Promise.all(helpseekerPromises);
+      res.render('requestecincal',{requests,helpseekers});
   } 
   catch (err) {
     return res.status(err?.status || 500).json({ message: err.message });
@@ -48,19 +107,51 @@ const getSignup = async (req, res) => {
 };
 
 
-// get Technical page
 const getTechPage = async (req, res) => {
   try {
-    // const technicalID = getParameter('technicalId');
-    // const request = await getOffers(technicalID);
-    // const helpseekersId = await 
-    // const userData = await userRepository.getName_Number(helpseekerId);
-    res.render('index');
-  } 
-  catch (err) {
+    const technicalID = getParameter('technicalId'); // Make sure to retrieve the correct technical ID
+
+    // Calculate revenue from the last month
+    const revenueLastMonth = await offerRepository.calculateRevenueLastMonth(technicalID);
+
+    // Calculate the number of approved offers for the current week
+    const approvedOffersCurrentWeek = await offerRepository.calculateApprovedOffersCurrentWeek(technicalID);
+
+    // Retrieve the last five offers
+    let lastFiveOffers = await offerRepository.getAnyFiveOffers(technicalID);
+
+    // Fetch details for each request associated with the offers, including the help seeker's name
+    lastFiveOffers = await Promise.all(lastFiveOffers.map(async (offer) => {
+      const requestDetails = await requestRepository.getRequestDetailsById(offer.requestID); // Fetch additional request details
+      const helpSeekerId = await requestRepository.getHelpSeekerIdByRequestId(offer.requestID);
+      console.log(`yalayayayayayayay`);
+      console.log(helpSeekerId);
+      // Assuming requestDetails includes a helpseekerId field
+      let helpSeekerName = 'Name not found'; // Default value if the help seeker's name can't be found
+      helpSeekerName = await userRepository.getUserFullName(helpSeekerId);
+      // if (requestDetails && requestDetails.helpseekerId) {
+      //   const helpSeeker = await User.findById(helpSeekerId);
+      // }
+
+      return {
+        ...offer, // Spread operator to copy existing offer properties
+        requestDetails: requestDetails || 'Details not found', // Add request details to the offer object
+        helpSeekerName // Add the help seeker's name to the offer object
+      };
+    }));
+
+    console.log(`Revenue Last Month: ${revenueLastMonth}`);
+    console.log(`Approved Offers Current Week: ${approvedOffersCurrentWeek}`);
+    console.log("Last Five Offers with Details and Help Seeker Names:", lastFiveOffers);
+
+    // Render the template with the necessary data
+    res.render('index_technical', { revenueLastMonth, approvedOffersCurrentWeek, lastFiveOffers,technicalID });
+  } catch (err) {
+    console.error("Error in getTechPage:", err);
     res.status(err?.status || 500).json({ message: err.message });
   }
 };
+
 
 
 const getOffers = async (technicalID) => {
@@ -164,6 +255,12 @@ module.exports = {
     getOffers,
     deleteOffer,
     getSignup,
-    getofferspage,
-    gettechincalprofile
+    getrequestspage,
+    gettechincalprofile,
+    addOffer,
+    getOffersPage,
+    update_offer
 };
+
+
+

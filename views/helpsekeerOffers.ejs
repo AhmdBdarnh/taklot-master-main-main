@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Dashboard - Takalot</title>
+  <title>HelpSekeer - Offers</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -32,7 +32,7 @@
 
   <header id="header" class="header fixed-top d-flex align-items-center">
     <div class="d-flex align-items-center justify-content-between">
-      <a href="index.html" class="logo d-flex align-items-center">
+      <a href="/home/hel" class="logo d-flex align-items-center">
         <img src="/img/logo2.png" alt="" alt="" width="45" height="100">
         <span class="d-none d-lg-block">Takalot</span>
       </a>
@@ -196,34 +196,34 @@
 
 
       <li class="nav-item">
-        <a class="nav-link " href="/home/offers">
+        <a class="nav-link " href="/home/helpseeker/requests">
           <i class="bi bi-menu-button-wide"></i>
            <span>Request List</span>
         </a>
       </li>
       <li class="nav-item">
 
-    <li class="nav-item">
-        <a class="nav-link " href="/">
-            <i class="bi bi-menu-button-wide"></i>
-            <span>Offers List</span>
-        </a>
-        </li>
-        <li class="nav-item">
-    
 
-        <!-- <li class="nav-item">
+
+        <li class="nav-item">
           <a class="nav-link " href="/home/request">
             <i class="bi bi-journal-text"></i><span>
-             <span></span>
+             <span>Add Request</span>
           </a>
-        </li> -->
+        </li>
        
-      
+        <li class="nav-item">
+          <a class="nav-link " href="/home/offers">
+              <i class="bi bi-menu-button-wide"></i>
+              <span>Offers List</span>
+          </a>
+          </li>
+          <li class="nav-item">
+
 
       <li class="nav-heading">Pages</li>
       <li class="nav-item">
-        <a class="nav-link collapsed" href="/home/Profile">
+        <a class="nav-link collapsed" href="users-profile.html">
           <i class="bi bi-person"></i>
           <span>Profile</span>
         </a>
@@ -237,12 +237,11 @@
 <!-- main -->
 <main class="main" id="main">
 <div class="pagetitle">
-    <h1>Requests</h1>
+    <h1>Offers</h1>
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/home/helpseeker">Home</a></li>
-            <li class="breadcrumb-item">Components</li>
-            <li class="breadcrumb-item active">Requests</li>
+            <li class="breadcrumb-item active">Offers</li>
         </ol>
     </nav>
 </div><!-- End Page Title -->
@@ -250,9 +249,10 @@
 
 <div class="container mt-4">
     <div class="row">
-        <% allOffers.forEach(offerArray => { %> <!-- Iterate over each offer array -->
-            <% offerArray.forEach(offer => { %> <!-- Iterate over each offer object in the array -->
+        <% allOffers.forEach(offerArray => { %> 
+            <% offerArray.forEach(offer => { %> 
                 <% if (offer) { %> <!-- Check if offer is defined -->
+                    <% const id = offer.requestID; %>
                     <% const offerRequestID = offer.requestID.toString(); %>
                     <% const request = requests.find(request => request._id.toString() === offerRequestID); %>
                     <% if (request) { %>
@@ -269,16 +269,20 @@
                                     <p class="card-text">phone number: <%= technicalDetail.phoneNumber %></p>
                                     <p class="card-text">yearsOfExperience: <%= technicalDetail.yearsOfExperience %></p>
                                     <p class="card-text">qualifications: <%= technicalDetail.qualifications %></p>
+                                    <p class="card-text">details: <%= request.details %></p>
+                                    <p class="card-text">comments: <%= offer.comments %></p>
+
+
                                     <!-- Buttons to interact with the offer -->
                                     <section class="section">
                                     <!-- form accept Offer -->
                                     <form action="/home/acceptOffer" method="post" >
-                                        <input type="hidden" name="offerRequestID" value="`<%= offerRequestID %>`">
+                                        <input type="hidden" name="offerRequestID" value="`<%= id %>`">
                                         <button class="btn btn-primary mr-2">Accept</button>
                                     </form>
                                     <!-- form reject Offer -->
                                     <form action="/home/rejectOffer" method="post" style="margin-left: 20px;">
-                                        <input type="hidden" name="offerRequestID" value="`<%= offerRequestID %>`">
+                                        <input type="hidden" name="offerRequestID" value="`<%= id %>`">
                                         <button class="btn btn-danger" >Reject</button>
                                    </form>
                                 </section>
@@ -291,7 +295,6 @@
         <% }) %>
     </div>
 </div>
-
 </main>
 <!-- END main -->
 

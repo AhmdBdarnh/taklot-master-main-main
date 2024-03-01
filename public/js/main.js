@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /**
 * Template Name: NiceAdmin
 * Updated: Jan 29 2024 with Bootstrap v5.3.2
@@ -6,8 +5,6 @@
 * Author: BootstrapMade.com
 * License: https://bootstrapmade.com/license/
 */
-=======
->>>>>>> ebraheem
 (function() {
   "use strict";
 
@@ -44,11 +41,14 @@
   /**
    * Sidebar toggle
    */
-  if (select('.toggle-sidebar-btn')) {
-    on('click', '.toggle-sidebar-btn', function(e) {
-      select('body').classList.toggle('toggle-sidebar')
-    })
-  }
+  document.addEventListener('DOMContentLoaded', function() {
+    if (select('.toggle-sidebar-btn')) {
+      on('click', '.toggle-sidebar-btn', function(e) {
+        select('body').classList.toggle('toggle-sidebar');
+        console.log('herrrrrrrreeeee');
+      });
+    }
+  });
 
   /**
    * Search bar toggle

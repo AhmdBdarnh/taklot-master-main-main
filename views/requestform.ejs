@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Dashboard - Takalot</title>
+  <title>Request - Form</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -32,7 +32,7 @@
 
   <header id="header" class="header fixed-top d-flex align-items-center">
     <div class="d-flex align-items-center justify-content-between">
-      <a href="index.html" class="logo d-flex align-items-center">
+      <a href="/home/helpseeker" class="logo d-flex align-items-center">
         <img src="/img/logo2.png" alt="" alt="" width="45" height="100">
         <span class="d-none d-lg-block">Takalot</span>
       </a>
@@ -213,6 +213,13 @@
         </li>
        
       
+        <li class="nav-item">
+          <a class="nav-link " href="/home/offers">
+              <i class="bi bi-menu-button-wide"></i>
+              <span>Offers List</span>
+          </a>
+          </li>
+          <li class="nav-item">
 
       <li class="nav-heading">Pages</li>
       <li class="nav-item">
@@ -230,11 +237,11 @@
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Dashboard</h1>
+      <h1>Request Form</h1>
       <nav>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item active">Dashboard</li>
+          <li class="breadcrumb-item"><a href="/home/helpseeker">Home</a></li>
+          <li class="breadcrumb-item active">Add Request</li>
         </ol>
       </nav>
     </div>
@@ -249,27 +256,6 @@
 
               <!-- General Form Elements -->
               <form action="/home/request" method="POST" enctype="multipart/form-data">
-              
-                <!-- <div class="row mb-3">
-                    <label for="inputText" class="col-sm-3 col-form-label">Full Name:</label>
-                    <div class="col-sm-9">
-                        <input type="text" id="fullName" name="fullName" class="form-control">
-                    </div>
-                </div>
-            
-                <div class="row mb-3">
-                    <label for="inputNumber" class="col-sm-3 col-form-label">P.Number:</label>
-                    <div class="col-sm-9">
-                        <input type="tel" id="phoneNumber" name="phoneNumber" class="form-control">
-                    </div>
-                </div>
-            
-                <div class="row mb-3">
-                    <label for="inputAddress" class="col-sm-3 col-form-label">Address:</label>
-                    <div class="col-sm-9">
-                        <input type="text" id="address" name="address" class="form-control">
-                    </div>
-                </div> -->
 
                 <% if (typeof requestID !== 'undefined' && requestID !== null) { %>
                   <input type="text" name="req_id" value="<%= requestID %>" style="display: none;">
@@ -305,14 +291,72 @@
         </div>
       </div>
     </section>
-    
-
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
   <footer id="footer" class="footer"></footer>
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+
+  <script>
+    // Wait for the DOM to be fully loaded
+    document.addEventListener("DOMContentLoaded", function(){
+      console.log("Script loaded.");
+    
+      // Event listener for the image input field
+      document.getElementById('image').addEventListener('change', function(event) {
+        console.log(`Image upload triggered`);
+        var file = event.target.files[0];
+        var formData = new FormData();
+        formData.append('image', file);
+    
+        // Fetch API to send the image to the backend
+        fetch('/api/upload-image', {
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Assuming the backend returns an object like { category: 'predicted_category' }
+            // Prompt the user to confirm the category
+            const userConfirmed = confirm(`The Takalot System Predicted According to the image you uploaded that there is a "${data.category}" malfunction. Do you want to choose this category or choose another category from the list?`);
+            
+            var select = document.getElementById('category');
+            select.innerHTML = ''; // Clear existing options before adding new ones
+            
+            if (userConfirmed) {
+                // User confirmed the predicted category
+                var option = document.createElement('option');
+                option.value = data.category;
+                option.textContent = data.category; // Assuming 'data.category' is the predicted category
+                select.appendChild(option);
+            } else {
+                // Optionally, handle the case where the user wants to choose a different category
+                // This could involve populating the select with all available categories
+                // For demonstration, let's add a placeholder for choosing another category
+                var placeholderOption = document.createElement('option');
+                placeholderOption.value = '';
+                placeholderOption.textContent = 'Please select a category...';
+                select.appendChild(placeholderOption);
+                
+                // Add other categories herea
+                var categories = ["Category1", "Category2", "Category3"]; // Example categories, replace with actual
+                categories.forEach(function(category) {
+                    var option = document.createElement('option');
+                    option.value = category;
+                    option.textContent = category;
+                    select.appendChild(option);
+                });
+            }
+        })
+        .catch(error => console.error('Error:', error));
+      });
+    });
+    </script>
+    
+
+
 
   <!-- Vendor JS Files -->
   <script src="/vendor/apexcharts/apexcharts.min.js"></script>
@@ -324,7 +368,6 @@
   <script src="/vendor/tinymce/tinymce.min.js"></script>
   <script src="/vendor/php-email-form/validate.js"></script>
   <script>
-
     var jsonData = {
         "categories": ["pip", "power socket", "door handlers"]
     };
