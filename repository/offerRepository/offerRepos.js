@@ -59,7 +59,6 @@ const getOffersByTechID = async (technicalID) => {
 
 const calculateRevenueLastMonth = async (technicalID) => {
   try {
-    console.log(`+++++assasas ${technicalID}`);
     const startOfLastMonth = new Date();
     startOfLastMonth.setMonth(startOfLastMonth.getMonth() - 1);
     startOfLastMonth.setDate(1);
@@ -74,8 +73,6 @@ const calculateRevenueLastMonth = async (technicalID) => {
       {
         $match: {
           technicalID: new ObjectId(technicalID), // Convert to ObjectId
-          // status: 'approved',
-          // approvedDate: { $gte: startOfLastMonth, $lte: endOfLastMonth }
         },
       },
       {

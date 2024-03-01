@@ -32,7 +32,7 @@
 
   <header id="header" class="header fixed-top d-flex align-items-center">
     <div class="d-flex align-items-center justify-content-between">
-      <a href="/home/hel" class="logo d-flex align-items-center">
+      <a href="/home/helpseeker" class="logo d-flex align-items-center">
         <img src="/img/logo2.png" alt="" alt="" width="45" height="100">
         <span class="d-none d-lg-block">Takalot</span>
       </a>
@@ -40,7 +40,7 @@
     </div><!-- End Logo -->
 
     <div class="search-bar">
-      <form class="search-form d-flex align-items-center" method="POST" action="#">
+      <form class="search-form d-flex align-items-center" method="get" action="/home/offers">
         <input type="text" name="query" placeholder="Search" title="Enter search keyword">
         <button type="submit" title="Search"><i class="bi bi-search"></i></button>
       </form>
@@ -181,7 +181,6 @@
 
 
 
-
   <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
   <aside id="sidebar" class="sidebar">
 
@@ -223,7 +222,7 @@
 
       <li class="nav-heading">Pages</li>
       <li class="nav-item">
-        <a class="nav-link collapsed" href="users-profile.html">
+        <a class="nav-link collapsed" href="/home/Profile">
           <i class="bi bi-person"></i>
           <span>Profile</span>
         </a>
@@ -233,6 +232,7 @@
    
 
   </aside><!-- End Sidebar-->
+
 
 <!-- main -->
 <main class="main" id="main">

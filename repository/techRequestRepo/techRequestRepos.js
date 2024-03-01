@@ -73,10 +73,22 @@ const getData = async technicalID => {
 };
 
 
+const deleteRequestsByRequestId = async (requestID) => {
+    try {
+        const result = await techRequestModel.deleteMany({ requestID });
+        return result;
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+};
+
+
 module.exports = {
     getReqById,
     deletetechSchema,
     gettAlltechSchema,
     addRequest,
-    getData
+    getData,
+    deleteRequestsByRequestId
 };
