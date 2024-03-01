@@ -1,20 +1,14 @@
 const reqRepository = require("../../repository/requestRepostiory/requesRepos");
-const { NotFoundError, BadRequsetError } = require("../../errors/err");
-const req = require("../../module/reuqestsSchema/request");
-const multer = require("multer");
-const technicalRep = require("../../repository/technicalReoistory/technicalRepos");
+const techReqRepo = require("../../repository/techRequestRepo/techRequestRepos");
 const offerRep = require("../../repository/offerRepository/offerRepos");
-const { getParameter } = require("../usersController/usersControllers");
-const nodemailer = require("nodemailer");
 const Techincal = require("../../module/technicalDataSchema/techincal");
-const upload = multer({ dest: "uploads/" });
 const TechnicianSocketMapping = require("../../module/technicalCategoryMapping");
-const mongoose = require("mongoose");
+const { NotFoundError, BadRequsetError } = require("../../errors/err");
+const { getParameter } = require("../usersController/usersControllers");
 require("dotenv").config();
 const sgMail = require("@sendgrid/mail");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const twilio = require("twilio");
-const axios = require("axios");
 const FormData = require("form-data");
 const fs = require("fs");
 const setupSocket = require("../../sockets/socketManager");
@@ -87,53 +81,61 @@ async function notifyRelevantTechnicals(matchingTechnicals, newRequest) {
 // Controller method for uploading image
 const request_post = async (req, res) => {
   try {
-    if (req.file && req.file.path) {
-      const formData = new FormData();
-      formData.append("image", fs.createReadStream(req.file.path));
-      // Proceed with sending the file to the Flask app
-    } else {
-      // Handle the case where the file is not uploaded
-      console.log("No file uploaded.");
-      // You might want to return an error response here
+    // for the update button
+    const { req_id, category, details, image } = req.body;
+    let data ;
+    if (!category){
+      data = { details, image };
     }
-
-    const req_id = req.body.req_id;
+    else {
+     data = { category, details, image };
+    }
     if (req_id) {
-      req_delete_byId(req_id);
-    }
-    const helpseekerId = getParameter("helpseekerID");
-    const { category, details } = req.body;
-    // Save the image to the database using the repository
-    const newReq = await reqRepository.addReq({
-      helpseekerId,
-      image: {
-        filename: req.file.originalname,
-        contentType: req.file.mimetype,
-        image: req.file.buffer,
-      },
-      category,
-      details,
-    });
-    const matchingTechnicals = await Techincal.find({
-      category: newReq.category,
-    });
-    if (matchingTechnicals && matchingTechnicals.length > 0) {
-      await notifyRelevantTechnicals(matchingTechnicals, newReq);
-      // Send SMS to matching technicals
-      // matchingTechnicals.forEach(technical => {
-      // const smsBody = `Hello ${technical.fullName}, you have a new request in your category "${newReq.category}". Check your email or our platform for details.`;
-      // sendSMS(technical.phoneNumber, smsBody); // Assuming technical has a phoneNumber field
-      // });
+      const updatedRequset = await reqRepository.updateReqq(req_id, data);
     } else {
-      console.log("No matching technicals found for category:", category);
+      if (req.file && req.file.path) {
+        const formData = new FormData();
+        formData.append("image", fs.createReadStream(req.file.path));
+        // Proceed with sending the file to the Flask app
+      } else {
+        // Handle the case where the file is not uploaded
+        console.log("No file uploaded.");
+        // You might want to return an error response here
+      }
+      const helpseekerId = getParameter("helpseekerID");
+
+      // const { category, details } = req.body;
+      const matchingTechnicals = await Techincal.find({
+        category: category,
+      });
+      if (matchingTechnicals && matchingTechnicals.length > 0) {
+        // Save the image to the database using the repository
+        const newReq = await reqRepository.addReq({
+          helpseekerId,
+          image: {
+            filename: req.file.originalname,
+            contentType: req.file.mimetype,
+            image: req.file.buffer,
+          },
+          category,
+          details,
+        });
+        await notifyRelevantTechnicals(matchingTechnicals, newReq);
+        const requestID = newReq._id;
+        for (const technical of matchingTechnicals) {
+          const technicalID = technical._id;
+          const chReq = await techReqRepo.addRequest({
+            requestID,
+            technicalID,
+          });
+          if (!chReq)
+            throw new BadRequsetError(`something is not true in add request`);
+        }
+      } else {
+        console.log("No matching technicals found for category:", category);
+      }
     }
 
-    // if (tech.isMatch === true) {
-    //   const requestID = newReq._id;
-    //   const technicalID = tech.technical_id;
-    //   const chReq = await techReqRepo.addRequest({ requestID, technicalID });
-    //   if (!chReq) throw new BadRequsetError(`Offer implement is not true`);
-    // }
     res.redirect("/home/helpseeker");
   } catch (err) {
     console.error(err);
@@ -194,29 +196,20 @@ const req_update = async (req, res) => {
 const req_delete = async (req, res) => {
   try {
     const requestId = req.body.requestID;
-
     const deletedReq = await reqRepository.deleteReq(requestId);
     if (!deletedReq || deletedReq.length === 0)
       throw new NotFoundError("Request");
+
+    const techReq = await techReqRepo.deleteRequestsByRequestId(requestId);
+    if (!techReq || techReq.length === 0) throw new NotFoundError("Request");
+
     const deleteOffer = await offerRep.deleteOfferbyReqId(requestId);
     if (!deleteOffer || deleteOffer.length === 0)
       throw new NotFoundError("Request in offers");
+
     res.redirect("/home/helpseeker/requests");
   } catch (err) {
     return res.status(err?.status || 500).json({ message: err.message });
-  }
-};
-
-// delete request by send id
-const req_delete_byId = async (reqId) => {
-  try {
-    const deletedReq = await reqRepository.deleteReq(reqId);
-    if (!deletedReq) throw new NotFoundError("Request");
-    const deleteOffer = await offerRep.deleteOfferbyReqId(reqId);
-    if (!deleteOffer) throw new NotFoundError("Request in offers");
-  } catch (err) {
-    console.error(err);
-    throw err; // Rethrow the error to be caught in the calling function
   }
 };
 

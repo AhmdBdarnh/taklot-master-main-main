@@ -69,10 +69,16 @@ const deleteOffer = async (req, res) => {
 };
 
 const getrequestspage = async (req, res) => {
-  try {                                                              
+  try {     
       const technicalID = getParameter('technicalId');
       const tech_request = await techReqRepository.getReqById(technicalID);
-      const requests = await requestRepository.gettAllReq(tech_request.requestID);
+      const requests = [];
+      for (const request of tech_request) {
+          const requestID = request.requestID;
+          const result = await requestRepository.getReqById(requestID);
+          requests.push(result);
+      }
+
       const helpseekerPromises = requests.map(request => {
         return userRepository.getUserByID(request.helpseekerId);
       });
@@ -124,8 +130,6 @@ const getTechPage = async (req, res) => {
     lastFiveOffers = await Promise.all(lastFiveOffers.map(async (offer) => {
       const requestDetails = await requestRepository.getRequestDetailsById(offer.requestID); // Fetch additional request details
       const helpSeekerId = await requestRepository.getHelpSeekerIdByRequestId(offer.requestID);
-      console.log(`yalayayayayayayay`);
-      console.log(helpSeekerId);
       // Assuming requestDetails includes a helpseekerId field
       let helpSeekerName = 'Name not found'; // Default value if the help seeker's name can't be found
       helpSeekerName = await userRepository.getUserFullName(helpSeekerId);
@@ -139,11 +143,6 @@ const getTechPage = async (req, res) => {
         helpSeekerName // Add the help seeker's name to the offer object
       };
     }));
-
-    console.log(`Revenue Last Month: ${revenueLastMonth}`);
-    console.log(`Approved Offers Current Week: ${approvedOffersCurrentWeek}`);
-    console.log("Last Five Offers with Details and Help Seeker Names:", lastFiveOffers);
-
     // Render the template with the necessary data
     res.render('index_technical', { revenueLastMonth, approvedOffersCurrentWeek, lastFiveOffers,technicalID });
   } catch (err) {
