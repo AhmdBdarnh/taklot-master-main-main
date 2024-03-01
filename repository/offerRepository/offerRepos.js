@@ -21,23 +21,32 @@ const addOffer = async (requestID, technicalID, bid, comments) => {
   }
 };
 
-const udpateOffer = async (requestID, newData) => {
+const udpateOffer = async (offerID, newData) => {
   try {
-    const offer = await Offer.findOneAndUpdate({ requestID }, newData);
+    const offer = await Offer.findOneAndUpdate({ _id: offerID }, newData, { new: true });
     return offer;
   } catch (error) {
-    return false;
+    console.error("Error updating offer:", error);
+    throw error;
   }
 };
 
-const deleteOffer = async (id) => {
+
+const deleteOffer = async (_id) => {
   try {
-    const offer = await Offer.findOneAndDelete({ requestID, technicalID });
-    return true;
-  } catch {
-    return false;
+    const offer = await Offer.findOneAndDelete( _id );
+    if (!offer) {
+      console.log(`Offer with ID ${_id} not found.`);
+      return null; // Indicate that no document was found to delete
+    }
+    console.log(`Offer with ID ${_id} deleted successfully.`);
+    return offer; // Return the deleted document
+  } catch (error) {
+    console.error("Error deleting offer:", error);
+    return false; // Indicate an error occurred
   }
 };
+
 
 const gettAllOffer = async (technicalID) => {
   try {
