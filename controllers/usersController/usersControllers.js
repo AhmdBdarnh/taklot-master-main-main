@@ -104,7 +104,11 @@ const getLogin = async (req, res) => {
 
 const getProfile =async (req, res) => {
   try {
-    res.render('profile');
+    const id = getParameter('helpseekerID');
+    // console.log(id);
+    const user = await userRepository.getUserByID(id);
+    // console.log(user);
+    res.render('profile', { user });
   } catch (err) {
     return res.status(err?.status || 500).json({ message: err.message });
   }

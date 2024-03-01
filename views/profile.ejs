@@ -249,7 +249,7 @@
       <div class="card">
         <div class="card-body text-center">
           <img src="/img/profile-img.jpg" alt="Profile" class="rounded-circle mb-3" style="width: 150px;">
-          <h2>Kevin Anderson</h2>
+          <h2><%= user.fullName %></h2>
           <h3>Web Designer</h3>
           <div class="social-links mt-2">
             <a href="#" class="me-2"><i class="fab fa-twitter"></i></a>
@@ -274,20 +274,21 @@
               <div class="pt-3">
                 <div class="row">
                   <div class="col-4"><strong>Full Name:</strong></div>
-                  <div class="col-8">Kevin Anderson</div>
+                  <div class="col-8"><%= user.fullName %></div>
                 </div>
                 <div class="row">
                   <div class="col-4"><strong>User Name:</strong></div>
-                  <div class="col-8">kevien32</div>
+                  <div class="col-8"><%= user.userName %></div>
                 </div>
                 <div class="row">
                   <div class="col-4"><strong>Phone:</strong></div>
-                  <div class="col-8">486-353829071</div>
+                  <div class="col-8"><%= user.phoneNumber %></div>
                 </div>
                 <div class="row">
                   <div class="col-4"><strong>Address:</strong></div>
-                  <div class="col-8">Sakhnin-98-North</div>
+                  <div class="col-8"><%= user.address %></div>
                 </div>
+                
               </div>
             </div>
     
