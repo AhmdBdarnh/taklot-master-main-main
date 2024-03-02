@@ -21,9 +21,16 @@ const addOffer = async (requestID, technicalID, bid, comments) => {
   }
 };
 
-const udpateOffer = async (offerID, newData) => {
+const udpateOffer = async (requestID, updateData) => {
   try {
-    const offer = await Offer.findOneAndUpdate({ _id: offerID }, newData, { new: true });
+    if (typeof requestID === "string") {
+      requestID = new ObjectId(requestID);
+    }
+    const offer = await Offer.findOneAndUpdate(
+      { requestID },
+      { status: updateData },
+      { new: true }
+    );
     return offer;
   } catch (error) {
     console.error("Error updating offer:", error);
@@ -31,22 +38,20 @@ const udpateOffer = async (offerID, newData) => {
   }
 };
 
-
 const deleteOffer = async (_id) => {
   try {
-    const offer = await Offer.findOneAndDelete( _id );
+    const offer = await Offer.findOneAndDelete(_id);
     if (!offer) {
       console.log(`Offer with ID ${_id} not found.`);
-      return null; // Indicate that no document was found to delete
+      return null; 
     }
     console.log(`Offer with ID ${_id} deleted successfully.`);
-    return offer; // Return the deleted document
+    return offer; 
   } catch (error) {
     console.error("Error deleting offer:", error);
-    return false; // Indicate an error occurred
+    return false; 
   }
 };
-
 
 const gettAllOffer = async (technicalID) => {
   try {
@@ -135,60 +140,52 @@ const calculateApprovedOffersCurrentWeek = async (technicalID) => {
   }
 };
 
-
-
-
-
 const getAnyFiveOffers = async (technicalID) => {
-    try {
-      const anyFiveOffers = await Offer.aggregate([
-        { $match: { technicalID: new ObjectId(technicalID) }}, // Match offers by technicalID
-        { $limit: 5 } // Limit to the first 5 offers found
-      ]);
-  
-      // Since we're directly fetching documents, there's no need for a $group stage like in the count example
-      // Check if offers are found and return them, or return an empty array if none were found
-      return anyFiveOffers.length > 0 ? anyFiveOffers : [];
-    } catch (err) {
-      console.error("Failed to retrieve offers:", err);
-      throw err;
-    }
-  };
+  try {
+    const anyFiveOffers = await Offer.aggregate([
+      { $match: { technicalID: new ObjectId(technicalID) } }, // Match offers by technicalID
+      { $limit: 5 }, // Limit to the first 5 offers found
+    ]);
 
+    // Since we're directly fetching documents, there's no need for a $group stage like in the count example
+    // Check if offers are found and return them, or return an empty array if none were found
+    return anyFiveOffers.length > 0 ? anyFiveOffers : [];
+  } catch (err) {
+    console.error("Failed to retrieve offers:", err);
+    throw err;
+  }
+};
 
-
-  /**
+/**
  * Gets the requestID for a given offerId.
  * @param {String} offerId The ID of the offer document.
  * @returns {Promise<mongoose.Schema.Types.ObjectId>} A promise that resolves to the requestID if found, or null if not found.
  */
-  async function getRequestIdByOfferId(offerId) {
-    if (!mongoose.Types.ObjectId.isValid(offerId)) {
-      throw new Error('Invalid offerId');
-    }
-  
-    try {
-      const offer = await Offer.findById(offerId).exec();
-      if (!offer) {
-        console.log('Offer not found');
-        return null;
-      }
-      return offer.requestID;
-    } catch (error) {
-      console.error('Error fetching Offer:', error);
-      throw error; // or handle it as you see fit
-    }
+async function getRequestIdByOfferId(offerId) {
+  if (!mongoose.Types.ObjectId.isValid(offerId)) {
+    throw new Error("Invalid offerId");
   }
 
-
-
-
+  try {
+    const offer = await Offer.findById(offerId).exec();
+    if (!offer) {
+      console.log("Offer not found");
+      return null;
+    }
+    return offer.requestID;
+  } catch (error) {
+    console.error("Error fetching Offer:", error);
+    throw error; // or handle it as you see fit
+  }
+}
 
 const deleteOfferbyReqId = async (requestID) => {
   try {
-    const offers = await Offer.deleteMany({ requestID });
-    console.log(offers);
-    return true;
+    if (typeof requestID === "string") {
+      requestID = new ObjectId(requestID);
+    }
+    const offers = await Offer.findOneAndDelete({ requestID });
+    return offers;
   } catch {
     return false;
   }
@@ -202,7 +199,6 @@ const getofferByReqId = async (requestID) => {
     return false;
   }
 };
-
 
 module.exports = {
   getOfferById,

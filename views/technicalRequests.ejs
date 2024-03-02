@@ -4,15 +4,13 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Dashboard - Takalot</title>
+  <title>Technical - Requests</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
   <!-- Favicons -->
   <link href="/img/favicon.png" rel="icon">
   <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
   <!-- Google Fonts -->
   <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -34,7 +32,7 @@
 
   <header id="header" class="header fixed-top d-flex align-items-center">
     <div class="d-flex align-items-center justify-content-between">
-      <a href="/home/helpseeker" class="logo d-flex align-items-center">
+      <a href="/home/technical" class="logo d-flex align-items-center">
         <img src="/img/logo2.png" alt="" alt="" width="45" height="100">
         <span class="d-none d-lg-block">Takalot</span>
       </a>
@@ -42,11 +40,12 @@
     </div><!-- End Logo -->
 
     <div class="search-bar">
-      <form class="search-form d-flex align-items-center" method="POST" action="#">
+      <form class="search-form d-flex align-items-center" method="get" action="/techhome/request">
         <input type="text" name="query" placeholder="Search" title="Enter search keyword">
         <button type="submit" title="Search"><i class="bi bi-search"></i></button>
       </form>
     </div><!-- End Search Bar -->
+    
 
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
@@ -190,129 +189,177 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link " href="/home">
+        <a class="nav-link " href="/home/technical">
           <i class="bi bi-grid"></i>
           <span>Home Page</span>
         </a>
       </li>
 
-
       <li class="nav-item">
-        <a class="nav-link " href="/home/helpseeker/requests">
-          <i class="bi bi-menu-button-wide"></i>
-           <span>Request List</span>
+        <a class="nav-link " href="/techhome/request">
+          <i class="bi bi-grid"></i>
+          <span>Request</span>
         </a>
       </li>
+
       <li class="nav-item">
-
-
-
-        <li class="nav-item">
-          <a class="nav-link " href="/home/request">
-            <i class="bi bi-journal-text"></i><span>
-             <span>Add Request</span>
-          </a>
-        </li>
-       
-        <li class="nav-item">
-          <a class="nav-link " href="/home/offers">
-              <i class="bi bi-menu-button-wide"></i>
-              <span>Offers List</span>
-          </a>
-          </li>
-          <li class="nav-item">
-
-
-      <li class="nav-heading">Pages</li>
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="/home/Profile">
-          <i class="bi bi-person"></i>
-          <span>Profile</span>
+        <a class="nav-link " href="/tech/offers">
+          <i class="bi bi-grid"></i>
+          <span>Offers</span>
         </a>
       </li>
-    </ul>
 
    
 
   </aside><!-- End Sidebar-->
 
-  <main id="main" class="main">
 
-    <div class="pagetitle">
-      <h1>Profile</h1>
+
+<!-- main -->
+
+<main id="main" class="main">
+  <div class="pagetitle">
+      <h1>Requests</h1>
       <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="/home">Home</a></li>
-          <li class="breadcrumb-item">Users</li>
-          <li class="breadcrumb-item active">Profile</li>
-        </ol>
+          <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/home/technical">Home</a></li>
+              <li class="breadcrumb-item active">Requests</li>
+          </ol>
       </nav>
-    </div><!-- End Page Title -->
+  </div><!-- End Page Title -->
 
-    <div class="container mt-6">
-  <div class="row">
-    <!-- Profile Card -->
-    <div class="col-lg-6 mb-4">
-      <div class="card">
-        <div class="card-body text-center">
-          <img src="/img/profile-img.jpg" alt="Profile" class="rounded-circle mb-3" style="width: 150px;">
-          <h2>Kevin Anderson</h2>
-          <h3>Web Designer</h3>
-          <div class="social-links mt-2">
-            <a href="#" class="me-2"><i class="fab fa-twitter"></i></a>
-            <a href="#" class="me-2"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" class="me-2"><i class="fab fa-instagram"></i></a>
-            <a href="#" class="me-2"><i class="fab fa-linkedin-in"></i></a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Tabbed Information Card -->
-    <div class="col-lg-6 mb-4">
-      <div class="card">
-        <div class="card-body">
-          <ul class="nav nav-tabs nav-tabs-bordered">
-            <li class="nav-item">
-              <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#overview">Overview</button>
-            </li>
-          </ul>
-          <div class="tab-content pt-3">
-            <div class="tab-pane fade show active" id="overview">
-              <div class="pt-3">
-                <div class="row">
-                  <div class="col-4"><strong>Full Name:</strong></div>
-                  <div class="col-8">Kevin Anderson</div>
-                </div>
-                <div class="row">
-                  <div class="col-4"><strong>User Name:</strong></div>
-                  <div class="col-8">kevien32</div>
-                </div>
-                <div class="row">
-                  <div class="col-4"><strong>Phone:</strong></div>
-                  <div class="col-8">486-353829071</div>
-                </div>
-                <div class="row">
-                  <div class="col-4"><strong>Address:</strong></div>
-                  <div class="col-8">Sakhnin-98-North</div>
-                </div>
-              </div>
-            </div>
-    
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+  <section class="py-5">
+      <div class="container">
+          <div class="row justify-content-center">
+              <% if (requests.length > 0) { %>
 
-  </main><!-- End #main -->
+                  <% requests.forEach(request => { %>
+                      <div class="col-md-6 col-lg-4 d-flex align-items-stretch mb-4">
+                          <!-- Profile Card -->
+                          <div class="card h-100">
+                              <img class="request-image" src="data:<%= request.image.contentType %>;base64,<%= request.image.image.toString('base64') %>" alt="Client Image">
+                              <div class="card-body d-flex flex-column">
+                                  <!-- Homeowner's Name -->
+                                  <% const helpseeker = helpseekers.find(helpseeker => helpseeker.id === request.helpseekerId); %>
+                                  <h5 class="card-title">Homeowner: <%= helpseeker.fullName %></h5>
+                                  <!-- Phone Number -->
+                                  <p class="card-text"><strong>Phone:</strong> <%= helpseeker.phoneNumber %></p>
+                                  <!-- Details about a Malfunction -->
+                                  <p class="card-text"><strong>Details about the malfunction:</strong> <%= request.details %></p>
+                                  <!-- Action Buttons -->
+                                  <div class="mt-auto d-flex justify-content-between">
+                                    <form action="/tech/deleteOffer" method="post">
+                                       <input type="hidden" name="ignoreID" value="<%= request._id %>">
+                                        <button class="btn btn-outline-secondary" type="submit">Ignore</button>
+                                    </form>
+                                      <!-- Trigger Modal Button for Adding Offer or Assistance -->
+                                      <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#addOfferModal" onclick="setRequestID('<%= request._id %>')">Add Offer</button>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                                                         
+                      <!-- Modal Structure -->
+                      <div class="modal fade" id="addOfferModal" tabindex="-1" aria-labelledby="addOfferModalLabel" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="addOfferModalLabel">Add Offer</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <!-- Form -->
+                                <form id="offerForm" action="/tech/addOffer" method="post">
+                                  <input type="hidden" id="requestID" name="requestID">
+                                  <div class="mb-3">
+                                    <label for="bid" class="form-label">Bid</label>
+                                    <input type="number" class="form-control" id="bid" name="bid" placeholder="Enter your bid">
+                                  </div>
+                                  <div class="mb-3">
+                                    <label for="comments" class="form-label">Comments</label>
+                                    <textarea class="form-control" id="comments" name="comments" rows="3" placeholder="Enter details of your offer"></textarea>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary" onclick="submitOffer()">Submit Offer</button>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                      </div>
+                  <% }) %>
+              <% } else { %>
+                  <div class="col-12">
+                      <p>No requests available at the moment.</p>
+                  </div>
+              <% } %>
+          </div>
+      </div>
+  </section>
+</main>
+
+
+
+<script>
+    function setRequestID(requestID) {
+        document.getElementById('requestID').value = requestID;
+    }
+
+    function submitOffer() {
+        // Show success message
+        var successMessage = document.createElement('div');
+        successMessage.classList.add('alert', 'alert-success');
+        successMessage.innerHTML = 'Offer sent successfully!';
+        document.body.appendChild(successMessage);
+
+        // Hide success message after 2 seconds
+        setTimeout(function() {
+            successMessage.remove();
+        }, 2000);
+    }
+</script>
+
+
+
+
+
+
+
+<script>
+  // Get the search input element
+  const searchInput = document.querySelector('input[name="query"]');
+
+  // Reset the value of the search input field
+  searchInput.value = '';
+</script>
+
+
+  <style>
+    .btn-custom {
+      background-color: #ff9800; /* Orange background */
+      color: #fff; /* White text */
+      border: none; /* No border */
+      padding: 10px 20px; /* Padding */
+      border-radius: 5px; /* Rounded corners */
+      cursor: pointer; /* Cursor style */
+      transition: background-color 0.3s ease; /* Smooth background color transition */
+  }
+  
+  .btn-custom:hover {
+      background-color: #f57c00; /* Darker orange background on hover */
+  }
+  
+  </style>
+
 
   <!-- ======= Footer ======= -->
-  <footer id="footer" class="footer">
-  
+  <footer id="footer" class="footer" style="background-color: ffff;">
+
+    
   </footer><!-- End Footer -->
 
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
 
   <!-- Vendor JS Files -->
   <script src="/vendor/apexcharts/apexcharts.min.js"></script>
@@ -323,10 +370,10 @@
   <script src="/vendor/simple-datatables/simple-datatables.js"></script>
   <script src="/vendor/tinymce/tinymce.min.js"></script>
   <script src="/vendor/php-email-form/validate.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 
   <script src="/js/main.js"></script>
 
 </body>
+ 
 
 </html>

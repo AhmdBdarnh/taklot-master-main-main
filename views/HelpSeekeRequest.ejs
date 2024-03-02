@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Request - Form</title>
+  <title>Helpseeker - Requests</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -39,12 +39,6 @@
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
 
-    <div class="search-bar">
-      <form class="search-form d-flex align-items-center" method="POST" action="#">
-        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-      </form>
-    </div><!-- End Search Bar -->
 
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
@@ -83,7 +77,6 @@
             <li>
               <hr class="dropdown-divider">
             </li>
-
           
           </ul><!-- End Notification Dropdown Items -->
 
@@ -179,16 +172,13 @@
 
   </header><!-- End Header -->
 
-
-
-
   <!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
   <aside id="sidebar" class="sidebar">
 
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link " href="/home">
+        <a class="nav-link " href="/home/helpseeker">
           <i class="bi bi-grid"></i>
           <span>Home Page</span>
         </a>
@@ -212,7 +202,6 @@
           </a>
         </li>
        
-      
         <li class="nav-item">
           <a class="nav-link " href="/home/offers">
               <i class="bi bi-menu-button-wide"></i>
@@ -220,6 +209,7 @@
           </a>
           </li>
           <li class="nav-item">
+
 
       <li class="nav-heading">Pages</li>
       <li class="nav-item">
@@ -230,133 +220,77 @@
       </li>
     </ul>
 
-   
+  </aside><!-- End Sidebar-->
 
-  </aside>
 
-  <main id="main" class="main">
+  <main id="main" class="main" >
 
     <div class="pagetitle">
-      <h1>Request Form</h1>
+      <h1>Requests</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="/home/helpseeker">Home</a></li>
-          <li class="breadcrumb-item active">Add Request</li>
+          <li class="breadcrumb-item active">Requests</li>
         </ol>
       </nav>
-    </div>
+    </div><!-- End Page Title -->
 
-    <section class="section" style="width: 90%;">
-      <div class="row" style="width: 100%;">
-        <div class="col-lg-6">
+    
+    <% if (userData != null && requests != null) { %>
+   
+    <section class="section" >
 
-          <div class="card">
+      <% requests.forEach(request => { %>
+        <div class="col-lg-3">
+          <!-- Request Card with photo, buttons, and details -->
+          <div class="card"  >
             <div class="card-body">
-              <h5 class="card-title">General Form Elements</h5>
+              <section class="request-section">
+                <h2>Request Details</h2>
+                <div class="request-details">
+                    <img class="request-image" src="data:<%= request.image.contentType %>;base64,<%= request.image.image.toString('base64') %>" alt="Client Image">
+                    <% if (userData != null) { %>
+                        <div class="detail">Name: <%= userData.fullName %></div>
+                        <div class="detail">Phone Number: <%= userData.phoneNumber %></div>
+                    <% } %>
+                    
+                    <div class="detail"><%= request.details %></div>
+                </div>
 
-              <!-- General Form Elements -->
-              <form action="/home/request" method="POST" enctype="multipart/form-data">
-
-                <% if (typeof requestID !== 'undefined' && requestID !== null) { %>
-                  <input type="text" name="req_id" value="<%= requestID %>" style="display: none;">
-                <% } %>
-
-
-                <div class="row mb-3">
-                  <div class="form-group">
-                    <label for="image">Upload a Picture:</label>
-                    <input type="file" id="image" name="image">
+              <section style="display: flex;">
+                              <!-- update button -->
+                <form action="/request/update" method="post">
+                  <div class="action-buttons">
+                    <input type="text" name="requestID" value="<%= request._id %>" style="display: none;">
+                    <button class="btn-update">Update</button>
                   </div>
-                </div>
-            
-                <div class="row mb-3">
-                  <label for="category">Category:</label>
-                  <select id="category" name="category"></select>
-                </div>
-            
-                <div class="row mb-3">
-                  <label for="details">Add Details:</label>
-                  <textarea id="details" name="details" placeholder="Enter your details here"></textarea>
-                </div>
-            
-                <div class="row mb-3">
-                    <div class="col-sm-9 offset-sm-3">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                </div>
-            </form><!-- End General Form Elements -->
-            </div>
-          </div>
+                </form>
+                              <!-- delete button -->
 
+                <form action="/request/delete" method="post">
+                  <div class="action-buttons">
+                    <input type="text" name="requestID" value="<%= request._id %>" style="display: none;">
+                    <button  class="btn-delete" >Delete</button>
+                   </div>
+                </form>
+                              <!-- END buttons -->
+                      
+              </section>
+
+            </section>
+            </div>
+          </div><!-- Request Card with photo, buttons, and details -->
         </div>
-      </div>
+        <% }) %>
     </section>
+    <% } %>
+    
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
-  <footer id="footer" class="footer"></footer>
+  <footer id="footer" class="footer"></footer><!-- End Footer -->
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-
-
-  <script>
-    // Wait for the DOM to be fully loaded
-    document.addEventListener("DOMContentLoaded", function(){
-      console.log("Script loaded.");
-    
-      // Event listener for the image input field
-      document.getElementById('image').addEventListener('change', function(event) {
-        console.log(`Image upload triggered`);
-        var file = event.target.files[0];
-        var formData = new FormData();
-        formData.append('image', file);
-    
-        // Fetch API to send the image to the backend
-        fetch('/api/upload-image', {
-            method: 'POST',
-            body: formData,
-        })
-        .then(response => response.json())
-        .then(data => {
-            // Assuming the backend returns an object like { category: 'predicted_category' }
-            // Prompt the user to confirm the category
-            const userConfirmed = confirm(`The Takalot System Predicted According to the image you uploaded that there is a "${data.category}" malfunction. Do you want to choose this category or choose another category from the list?`);
-            
-            var select = document.getElementById('category');
-            select.innerHTML = ''; // Clear existing options before adding new ones
-            
-            if (userConfirmed) {
-                // User confirmed the predicted category
-                var option = document.createElement('option');
-                option.value = data.category;
-                option.textContent = data.category; // Assuming 'data.category' is the predicted category
-                select.appendChild(option);
-            } else {
-                // Optionally, handle the case where the user wants to choose a different category
-                // This could involve populating the select with all available categories
-                // For demonstration, let's add a placeholder for choosing another category
-                var placeholderOption = document.createElement('option');
-                placeholderOption.value = '';
-                placeholderOption.textContent = 'Please select a category...';
-                select.appendChild(placeholderOption);
-                
-                // Add other categories herea
-                var categories = ["Category1", "Category2", "Category3"]; // Example categories, replace with actual
-                categories.forEach(function(category) {
-                    var option = document.createElement('option');
-                    option.value = category;
-                    option.textContent = category;
-                    select.appendChild(option);
-                });
-            }
-        })
-        .catch(error => console.error('Error:', error));
-      });
-    });
-  </script>
-    
-
-
 
   <!-- Vendor JS Files -->
   <script src="/vendor/apexcharts/apexcharts.min.js"></script>
@@ -367,22 +301,8 @@
   <script src="/vendor/simple-datatables/simple-datatables.js"></script>
   <script src="/vendor/tinymce/tinymce.min.js"></script>
   <script src="/vendor/php-email-form/validate.js"></script>
-<script>
-  var jsonData = {
-      "categories": ["","pip", "power socket", "door handlers"]
-  };
-  function populateCategories() {
-      var select = document.getElementById("category");
-      jsonData.categories.forEach(function(category) {
-          var option = document.createElement("option");
-          option.textContent = category;
-          option.value = category;
-          select.appendChild(option);
-      });
-  }
-  populateCategories();
-</script>
-  <!-- Template Main JS File -->
+
+  <!-- Template Main JS File -->  
   <script src="/js/main.js"></script>
 
 </body>

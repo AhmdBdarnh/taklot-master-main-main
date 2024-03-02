@@ -3,12 +3,12 @@ const mongoose = require('mongoose');
 const offerSchema = new mongoose.Schema({
       requestID: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Request', // Assuming 'Request' is the name of the corresponding model
+        ref: 'Request', 
         required: true
     },
     technicalID: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Technical', // Assuming 'Technical' is the name of the corresponding model
+        ref: 'Technical',
         required: true
     },
       bid: {
