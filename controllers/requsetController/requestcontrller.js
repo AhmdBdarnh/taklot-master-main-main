@@ -164,7 +164,7 @@ const renderUploadForm = async (req, res) => {
 // add new request to db
 const getReqPage = async (req, res) => {
   try {
-    res.render("Helpseeker-requestform.ejs");
+    res.render("Helpseeker-requestform");
   } catch (err) {
     return res.status(err?.status || 500).json({ message: err.message });
   }
@@ -186,7 +186,7 @@ const getReqByID = async (req, res) => {
 const req_update = async (req, res) => {
   try {
     const requestID = req.body.requestID;
-    res.render("Helpseeker-requestform.ejs", { requestID });
+    res.render("Helpseeker-requestform", { requestID });
   } catch (err) {
     return res.status(err?.status || 500).json({ message: err.message });
   }
