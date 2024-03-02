@@ -119,7 +119,7 @@ const getTechPage = async (req, res) => {
 
     // Calculate revenue from the last month
     const revenueLastMonth = await offerRepository.calculateRevenueLastMonth(technicalID);
-
+    const clientId =technicalID;
     // Calculate the number of approved offers for the current week
     const approvedOffersCurrentWeek = await offerRepository.calculateApprovedOffersCurrentWeek(technicalID);
 
@@ -144,7 +144,7 @@ const getTechPage = async (req, res) => {
       };
     }));
     // Render the template with the necessary data
-    res.render('index_technical', { revenueLastMonth, approvedOffersCurrentWeek, lastFiveOffers,technicalID });
+    res.render('index_technical', { revenueLastMonth, approvedOffersCurrentWeek, lastFiveOffers,technicalID,clientId });
   } catch (err) {
     console.error("Error in getTechPage:", err);
     res.status(err?.status || 500).json({ message: err.message });

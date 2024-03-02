@@ -8,25 +8,25 @@ const homeRout = require('./router/homePageRouter/home');
 const feedbackRout = require('./router/feedbackRouter/feedback');
 const singupRout = require('./router/signup/signup');
 const uploadImageRouter = require('./router/flaskApiRouter/uploadImageRouter');
-const socketIo = require('socket.io');
-
+const path = require('path');
+const http = require('http');
+const app = express();
+const server = http.createServer(app); // Create an HTTP server for Socket.IO
+const setupSocket = require('./socket/socketManager');
+setupSocket(server); // Pass the HTTP server to your setup function
 
 
 const { connectDB } = require('./db/dbconnect');
 
 
-const path = require('path');
-const http = require('http');
 
 
 // Import setupSocket from your socketManager.js (ensure the path is correct)
-const setupSocket = require('./sockets/socketManager');
+// const setupSocket = require('./sockets/socketManager');
  
 // Constants
-const app = express();
-const server = http.createServer(app); // Create an HTTP server for Socket.IO
 const port = process.env.PORT || 8000;
-const io = require('./module/io_Initialization').init(server); // Use the path to your io module
+// const io = require('./module/io_Initialization').init(server); // Use the path to your io module
 
  
 // Serve static files from the 'public' directory
@@ -59,7 +59,7 @@ app.use('/api', uploadImageRouter);
 connectDB();
 
 // Setup and use Socket.IO with the server
-setupSocket(server);
+// setupSocket(server);
 
 app.listen(port, () => {
   console.log(`http://localhost:${port}/login`);

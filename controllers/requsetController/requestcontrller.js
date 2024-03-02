@@ -2,7 +2,8 @@ const reqRepository = require("../../repository/requestRepostiory/requesRepos");
 const techReqRepo = require("../../repository/techRequestRepo/techRequestRepos");
 const offerRep = require("../../repository/offerRepository/offerRepos");
 const Techincal = require("../../module/technicalDataSchema/techincal");
-const TechnicianSocketMapping = require("../../module/technicalCategoryMapping");
+// const TechnicianSocketMapping = require("../../module/tehnicalMappingSocketSchema/techMapSchema");
+const Notification = require("../../module/notificationSchema/notificationSchema ")
 const { NotFoundError, BadRequsetError } = require("../../errors/err");
 const { getParameter } = require("../usersController/usersControllers");
 require("dotenv").config();
@@ -11,9 +12,11 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const twilio = require("twilio");
 const FormData = require("form-data");
 const fs = require("fs");
-const setupSocket = require("../../sockets/socketManager");
-const { server } = require("../../app");
-const { notifyTechnicianById } = setupSocket(server);
+const { getUserSocketId,
+  getOnlineUsers,
+  io} = require('../../socket/index');
+
+// console.log('Current User Socket Map:', userSocketMap);
 
 // Function to send SMS
 async function sendSMS(to, body) {
@@ -34,61 +37,69 @@ async function sendSMS(to, body) {
   }
 }
 
+async function sendNotification(technicianId, content) {
+  const onlineUsers = getOnlineUsers();
+  console.log(onlineUsers);
+
+  const socketId = getUserSocketId(technicianId);
+  console.log('Sending notification to technicianId:', technicianId, 'Socket ID:', socketId);
+  if (socketId) {
+    io.to(socketId).emit('notification', content);
+    console.log('Notification sent:', content);
+  } else {
+    console.log('Technician is offline:', technicianId);
+    // Consider storing the notification for later delivery
+  }
+}
+
+
 async function notifyRelevantTechnicals(matchingTechnicals, newRequest) {
   for (const technical of matchingTechnicals) {
-    const msg = {
-      to: technical.email, // recipient email from the technical document
-      from: "aminw999mn@gmail.com", // Verified sender email in SendGrid
-      subject: `New Request Available in ${newRequest.category}`, // Subject line
-      text: `Hello ${technical.fullName},\n\nA new request in your category "${newRequest.category}" has been opened. Details: ${newRequest.details}`, // Plain text body
-      html: `<p>Hello <b>${technical.fullName}</b>,</p><p>A new request in your category "<b>${newRequest.category}</b>" has been opened. Details: ${newRequest.details}</p>`, // HTML body content
+    const emailContent = {
+      to: technical.email,
+      from: "aminw999mn@gmail.com",
+      subject: `New Request Available in ${newRequest.category}`,
+      text: `Hello ${technical.fullName},\n\nA new request in your category "${newRequest.category}" has been opened. Details: ${newRequest.details}`,
+      html: `<p>Hello <b>${technical.fullName}</b>,</p><p>A new request in your category "<b>${newRequest.category}</b>" has been opened. Details: ${newRequest.details}</p>`,
+    };
+
+    const notificationContent = {
+      title: `New Request in ${newRequest.category}`,
+      message: `A new request in your category "${newRequest.category}" has been opened. Details: ${newRequest.details}`,
+      requestId: newRequest._id.toString(),
+      category: newRequest.category,
+      details: newRequest.details,
     };
 
     try {
-      await sgMail.send(msg);
+      // Send email
+      await sgMail.send(emailContent);
       console.log(`Email sent to ${technical.fullName}`);
 
-      console.log(
-        `Looking for techSocketMapping with technicianId: ${technical._id}`
-      );
-      const techSocketMapping = await TechnicianSocketMapping.findOne({
-        technicianId: technical._id,
-      });
 
-      matchingTechnicals.forEach((technician) => {
-        notifyTechnicianById(technician._id.toString(), "newRequest", {
-          title: `New Request in ${newRequest.category}`,
-          message: `A new request in your category "${newRequest.category}" has been opened. Details: ${newRequest.details}`,
-          requestId: newRequest._id,
-          category: newRequest.category,
-          details: newRequest.details,
-        }).catch((error) => {
-          console.error(
-            `Error sending notification to technician ${technician._id}:`,
-            error
-          );
-        });
-      });
-    } catch (error) {
-      console.error(
-        `Failed to send notification to ${technical.fullName}:`,
-        error
-      );
+      const notificationContent = `A new request in your category "${newRequest.category}" has been opened. Details: ${newRequest.details}`;
+      await sendNotification(technical._id.toString(), notificationContent);
+      console.log(`Notification processed for ${technical.fullName}`);
+    } 
+    
+    catch (error) {
+      console.error(`Failed to process notification for ${technical.fullName}:`, error);
     }
   }
 }
+
 
 // Controller method for uploading image
 const request_post = async (req, res) => {
   try {
     // for the update button
     const { req_id, category, details, image } = req.body;
-    let data ;
-    if (!category){
+    let data;
+    if (!category) {
       data = { details, image };
     }
     else {
-     data = { category, details, image };
+      data = { category, details, image };
     }
     if (req_id) {
       const updatedRequset = await reqRepository.updateReqq(req_id, data);

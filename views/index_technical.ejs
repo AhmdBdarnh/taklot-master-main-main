@@ -10,26 +10,71 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-<script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+  <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
 
-<link href="/img/favicon.png" rel="icon">
-<link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="/img/favicon.png" rel="icon">
+  <link href="/img/apple-touch-icon.png" rel="apple-touch-icon">
 
-<!-- Google Fonts -->
-<link href="https://fonts.gstatic.com" rel="preconnect">
-<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
 
-<!-- Vendor CSS Files -->
-<link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-<link href="/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-<link href="/vendor/quill/quill.snow.css" rel="stylesheet">
-<link href="/vendor/quill/quill.bubble.css" rel="stylesheet">
-<link href="/vendor/remixicon/remixicon.css" rel="stylesheet">
-<link href="/vendor/simple-datatables/style.css" rel="stylesheet">
+  <!-- Vendor CSS Files -->
+  <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="/vendor/quill/quill.snow.css" rel="stylesheet">
+  <link href="/vendor/quill/quill.bubble.css" rel="stylesheet">
+  <link href="/vendor/remixicon/remixicon.css" rel="stylesheet">
+  <link href="/vendor/simple-datatables/style.css" rel="stylesheet">
 
-<!-- Template Main CSS File -->
-<link href="/css/style.css" rel="stylesheet">
+  <!-- Template Main CSS File -->
+  <link href="/css/style.css" rel="stylesheet">
+  <script>
+    var clientId = '<%= clientId %>'; // The clientId is passed from the server-side
+
+    const socket = io('http://localhost:3000', { withCredentials: true,
+                                                 extraHeaders: { "my-custom-header": "abcd" },
+                                                 query: {
+                                                  userType: 'technician',
+                                                  clientId: clientId
+                                                } });
+    // Listen for the 'firstEvent' event
+    socket.on('firstEvent', function (message) {
+      console.log('Message from server:', message);
+      // You can also manipulate the DOM here to display the message
+      // For example, display the message in an alert box:
+      alert(message);
+    });
+    console.log('Connected to server');
+    socket.emit('registerUser', clientId);
+
+    // Add listener for 'notification' event
+  socket.on('notification', function (notification) {
+    console.log('Received notification:', notification);
+    alert('Received notification:', notification);
+    displayNotification(notification);
+  });
+
+  // Function to display the notification
+  function displayNotification(notification) {
+    // Assuming 'notifications' is the class of the dropdown where notifications should appear
+    var notificationsDropdown = document.querySelector('.notifications');
+    if (notificationsDropdown) {
+      var notificationItem = document.createElement('li');
+      notificationItem.className = 'notification-item';
+      notificationItem.innerHTML = `
+        <div>
+          <h4>${notification.title}</h4>
+          <p>${notification.message}</p>
+        </div>
+      `;
+      notificationsDropdown.insertBefore(notificationItem, notificationsDropdown.firstChild);
+    }
+  }
+  </script>
 
 
 
@@ -100,7 +145,7 @@
               <hr class="dropdown-divider">
             </li>
 
-          
+
           </ul><!-- End Notification Dropdown Items -->
 
         </li><!-- End Notification Nav -->
@@ -272,8 +317,10 @@
                       <i class="bi bi-cart"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>$<%= approvedOffersCurrentWeek %></h6>
-                      <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+                      <h6>$<%= approvedOffersCurrentWeek %>
+                      </h6>
+                      <span class="text-success small pt-1 fw-bold">12%</span> <span
+                        class="text-muted small pt-2 ps-1">increase</span>
 
                     </div>
                   </div>
@@ -307,9 +354,11 @@
                       <i class="bi bi-currency-dollar"></i>
                     </div>
                     <div class="ps-3">
-                      <h6>$<%= revenueLastMonth %></h6>
-                      
-                      <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
+                      <h6>$<%= revenueLastMonth %>
+                      </h6>
+
+                      <span class="text-success small pt-1 fw-bold">8%</span> <span
+                        class="text-muted small pt-2 ps-1">increase</span>
 
                     </div>
                   </div>
@@ -345,7 +394,8 @@
                     </div>
                     <div class="ps-3">
                       <h6>1244</h6>
-                      <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span>
+                      <span class="text-danger small pt-1 fw-bold">12%</span> <span
+                        class="text-muted small pt-2 ps-1">decrease</span>
 
                     </div>
                   </div>
@@ -468,24 +518,31 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <% lastFiveOffers.forEach((offer, index) => { %>
-                          <tr>
-                              <th scope="row"><a href="#"><%= offer.id %></a></th>
-                              <td><%= offer.helpSeekerName %></td>
-                              <td><a href="#" class="text-primary"><%= offer.requestDetails %></a></td>
-                              <td>$<%= offer.bid %></td>
-                              <td>
-                                  <span class="badge 
+                      <% lastFiveOffers.forEach((offer, index)=> { %>
+                        <tr>
+                          <th scope="row"><a href="#">
+                              <%= offer.id %>
+                            </a></th>
+                          <td>
+                            <%= offer.helpSeekerName %>
+                          </td>
+                          <td><a href="#" class="text-primary">
+                              <%= offer.requestDetails %>
+                            </a></td>
+                          <td>$<%= offer.bid %>
+                          </td>
+                          <td>
+                            <span class="badge 
                                       <%= offer.status === 'approved' ? 'bg-success' : 
                                           offer.status === 'pending' ? 'bg-warning' : 
                                           'bg-danger' %>">
-                                      <%= offer.status %>
-                                  </span>
-                              </td>
-                          </tr>
-                      <% }); %>
-                  </tbody>
-                  
+                              <%= offer.status %>
+                            </span>
+                          </td>
+                        </tr>
+                        <% }); %>
+                    </tbody>
+
                   </table>
 
                 </div>
@@ -500,11 +557,11 @@
         <!-- Right side columns -->
         <div class="col-lg-4">
 
-     
 
 
 
-     
+
+
 
         </div><!-- End Right side columns -->
 
@@ -518,10 +575,11 @@
     <div class="copyright">
       &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
     </div>
-    
+
   </footer><!-- End Footer -->
 
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
   <script src="/vendor/apexcharts/apexcharts.min.js"></script>
@@ -535,50 +593,9 @@
 
   <!-- Template Main JS File -->
   <script src="/js/main.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const socket = io('http://localhost:8000', {
-        reconnectionAttempts: 5,
-        reconnectionDelayMax: 5000,
-      }); // Adjust this URL to match your server
-        var technicianId = '<%= technicalID %>'; // This should be dynamically set based on the logged-in technician
-    
-        socket.on('connect', function() {
-            console.log('Connected to server');
-            console.log('Technician ID:', technicianId);
-            socket.emit('technicianConnected', technicianId);
-        });
-        // Listen for 'newNotification' events from the server
-        socket.on('newRequest', function(notification) {
-          console.log('i am triggggggggggggggggggggerrrreeeed');
-            console.log('Notification received:', notification);
-            const notificationsMenu = document.querySelector('.notifications');
-            const notificationCountBadge = document.querySelector('.badge-number');
-            let noOfNotifications = parseInt(notificationCountBadge.textContent, 10);
-            noOfNotifications = isNaN(noOfNotifications) ? 0 : noOfNotifications; // Check for NaN
-            notificationCountBadge.textContent = noOfNotifications + 1;
-            document.querySelector('.dropdown-header').innerHTML = `You have ${noOfNotifications + 1} new notifications <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>`;
-    
-            // Add the new notification to the dropdown
-            const newNotificationHtml = `
-                <li class="notification-item">
-                    <i class="bi bi-exclamation-circle text-warning"></i>
-                    <div>
-                        <h4>${notification.title}</h4>
-                        <p>${notification.message}</p>
-                        <p>Just now</p>
-                    </div>
-                </li>
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
-            `;
-            notificationsMenu.insertAdjacentHTML('beforeend', newNotificationHtml);
-        });
-    });
-    </script>
-    
   
+
+
 
 </body>
 
