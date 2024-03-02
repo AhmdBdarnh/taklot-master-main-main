@@ -186,14 +186,13 @@ const getTechPage = async (req, res) => {
         // Assuming requestDetails includes a helpseekerId field
         let helpSeekerName = "Name not found"; // Default value if the help seeker's name can't be found
         helpSeekerName = await userRepository.getUserFullName(helpSeekerId);
-        // if (requestDetails && requestDetails.helpseekerId) {
-        //   const helpSeeker = await User.findById(helpSeekerId);
+
         // }
 
         return {
-          ...offer, // Spread operator to copy existing offer properties
-          requestDetails: requestDetails || "Details not found", // Add request details to the offer object
-          helpSeekerName, // Add the help seeker's name to the offer object
+          ...offer, 
+          requestDetails: requestDetails || "Details not found",
+          helpSeekerName,
         };
       })
     );

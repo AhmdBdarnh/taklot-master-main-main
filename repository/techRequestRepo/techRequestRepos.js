@@ -19,7 +19,6 @@ const getReqById = async (technicalID) => {
 
 
 
-
 const gettAlltechSchema = async () => {
     try {
         const allTechReq = await techRequestModel.find();
