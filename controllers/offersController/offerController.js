@@ -5,7 +5,6 @@ const { NotFoundError, BadRequsetError } = require('../../errors/err');
 // add new offer to db
 const offer_post = async (req, res) => {
   try {
-    console.log(req.body.requestID)
     const new_Offr = await reqRepository.addOffer(req.body);
     if (!new_Offr) throw new BadRequsetError(`Offer implement is not true`);
        return res.status(200).json(new_Offr);
