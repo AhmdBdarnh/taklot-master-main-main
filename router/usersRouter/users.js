@@ -19,7 +19,6 @@ router.get("/home/offers", userController.getOffers);
 router.get("/home/Profile", userController.getProfile);
 
 router.post("/home/acceptOffer", userController.acceptOffer);
-// router.post("/home/rejectOffer", userController.rejectOffer);
 
 
 
