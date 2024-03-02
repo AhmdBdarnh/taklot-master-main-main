@@ -187,7 +187,7 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link " href="/home">
+        <a class="nav-link " href="/home/helpseeker">
           <i class="bi bi-grid"></i>
           <span>Home Page</span>
         </a>
@@ -278,11 +278,15 @@
                                     <!-- form accept Offer -->
                                     <form action="/home/acceptOffer" method="post" >
                                         <input type="hidden" name="offerRequestID" value="`<%= id %>`">
+                                        <input type="hidden" name="bool" value="0">
+
                                         <button class="btn btn-primary mr-2">Accept</button>
                                     </form>
                                     <!-- form reject Offer -->
-                                    <form action="/home/rejectOffer" method="post" style="margin-left: 20px;">
+                                    <form action="/home/acceptOffer" method="post" style="margin-left: 20px;">
                                         <input type="hidden" name="offerRequestID" value="`<%= id %>`">
+                                        <input type="hidden" name="bool" value="1">
+
                                         <button class="btn btn-danger" >Reject</button>
                                    </form>
                                 </section>

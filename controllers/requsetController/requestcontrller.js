@@ -164,7 +164,7 @@ const renderUploadForm = async (req, res) => {
 // add new request to db
 const getReqPage = async (req, res) => {
   try {
-    res.render("requestform");
+    res.render("Helpseeker-requestform");
   } catch (err) {
     return res.status(err?.status || 500).json({ message: err.message });
   }
@@ -186,7 +186,7 @@ const getReqByID = async (req, res) => {
 const req_update = async (req, res) => {
   try {
     const requestID = req.body.requestID;
-    res.render("requestform", { requestID });
+    res.render("Helpseeker-requestform", { requestID });
   } catch (err) {
     return res.status(err?.status || 500).json({ message: err.message });
   }
@@ -204,8 +204,7 @@ const req_delete = async (req, res) => {
     if (!techReq || techReq.length === 0) throw new NotFoundError("Request");
 
     const deleteOffer = await offerRep.deleteOfferbyReqId(requestId);
-    if (!deleteOffer || deleteOffer.length === 0)
-      throw new NotFoundError("Request in offers");
+
 
     res.redirect("/home/helpseeker/requests");
   } catch (err) {

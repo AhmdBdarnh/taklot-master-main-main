@@ -24,6 +24,7 @@ router.get("/tech/offers",technicalController.getOffersPage);
 router.post("/tech/addOffer",technicalController.addOffer);
 
 router.post("/tech/updateOffer",technicalController.update_offer);
+router.post("/tech/deleteOffer",technicalController.ignoreOffer);
 
 
 module.exports = router;
