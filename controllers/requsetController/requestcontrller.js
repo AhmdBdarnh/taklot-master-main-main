@@ -120,6 +120,12 @@ const request_post = async (req, res) => {
           category,
           details,
         });
+
+
+        const io = require('../../io').getIO();
+        io.emit("new-request", { category: newReq.category, details: newReq.details }); // Adjust according to your frontend needs
+
+        
         await notifyRelevantTechnicals(matchingTechnicals, newReq);
         const requestID = newReq._id;
         for (const technical of matchingTechnicals) {

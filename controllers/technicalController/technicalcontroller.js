@@ -3,6 +3,8 @@ const offerRepository = require("../../repository/offerRepository/offerRepos");
 const requestRepository = require("../../repository/requestRepostiory/requesRepos");
 const userRepository = require("../../repository/userRepository/userRepos");
 const techReqRepository = require("../../repository/techRequestRepo/techRequestRepos");
+const socketManager = require('../../socketManager'); // Adjust the path to your socketManager module
+
 const {
   saveParameter,
   getParameter,
@@ -38,6 +40,16 @@ const addOffer = async (req, res) => {
       bid,
       comments
     );
+
+    const userId = await requestRepository.getHelpSeekerIdByRequestId(requestID);
+    // Store the new offer in Redis
+    const helpSeekerSocketId=socketManager.getUserSocket(userId);
+    // Get the help seeker's socket ID from Redis
+    const io = require("../../io").getIO();
+
+    // Emit a socket.io event to notify the help seeker about the new offer
+    io.to(helpSeekerSocketId).emit('newOffer', new_Offer);
+
     if (!new_Offer)
       throw new BadRequsetError(`Technical implement is not true`);
     res.redirect("offers");

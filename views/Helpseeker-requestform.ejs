@@ -26,6 +26,75 @@
   <link href="/vendor/simple-datatables/style.css" rel="stylesheet">
 
 <link href="/css/style.css" rel="stylesheet">
+<script src="/socket.io/socket.io.js"></script>
+  <script>
+
+    // Example: connect to the server with the userId, if necessary for your use case
+    const userId = "<%= userId %>";
+
+  // Example: connect to the server with the userId as a query parameter
+  const socket = io(`/?userId=${userId}`);
+
+  socket.on("connect", () => {
+    console.log("Connected to server with userId:", userId);
+  });
+
+    socket.on("newOffer", function (data) {
+      console.log("New offer received:", data);
+      const notificationsDiv = document.getElementById("notifications");
+      const notification = document.createElement("p");
+      // Correctly accessing the category and details from the data object
+      notification.textContent = `New offer for your request  '${data.bid}': ${data.comments}`;
+      notificationsDiv.appendChild(notification);
+
+
+      // Increment the notification count
+      const badge = document.getElementById("notificationBadge");
+      let count = parseInt(badge.textContent) || 0;
+      badge.textContent = ++count;
+
+      if (count > 0) {
+        badge.classList.add('show-badge');
+      } else {
+        badge.classList.remove('show-badge');
+      }
+
+    });
+  </script>
+    
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const socket = io(); // Connect to the server
+  
+      document.getElementById("submitRequest").addEventListener("click", function(event) {
+        event.preventDefault(); // Prevent the default form submission
+  
+        const form = document.getElementById("MainForm"); // Make sure this matches your actual form ID
+        const formData = new FormData(form);
+  
+        // Send the form data to the server
+        fetch("/home/request", {
+          method: "POST",
+          body: formData, // Sending the formData
+        })
+        .then((response) => {
+          if(response.ok) {
+            return response.json(); // Parse JSON response if the request was successful
+          }
+          throw new Error('Network response was not ok.');
+        })
+        .then((data) => {
+          console.log("Success:", data);
+          window.location.href = '/home'; // Redirect to the home page
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          // Here, you might want to handle errors, perhaps showing a message to the user
+        });
+      });
+    });
+  </script>
+  
 </head>
 
 <body>

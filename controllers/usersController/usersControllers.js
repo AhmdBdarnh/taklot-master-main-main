@@ -129,7 +129,8 @@ const post_Login = async (req, res) => {
 
 const getUserPage = async (req, res) => {
   try {
-    res.render("helpSeeker-index");
+    const userId = getParameter("helpseekerID");
+    res.render("helpSeeker-index",{userId});
   } catch (err) {
     return res.status(err?.status || 500).json({ message: err.message });
   }

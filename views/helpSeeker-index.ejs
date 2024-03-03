@@ -24,6 +24,59 @@
   <link href="/vendor/quill/quill.bubble.css" rel="stylesheet">
   <link href="/vendor/remixicon/remixicon.css" rel="stylesheet">
   <link href="/vendor/simple-datatables/style.css" rel="stylesheet">
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    console.log("<%= userId %>");
+  </script>
+
+  <script>
+
+    // Example: connect to the server with the userId, if necessary for your use case
+    const userId = "<%= userId %>";
+
+  // Example: connect to the server with the userId as a query parameter
+  const socket = io(`/?userId=${userId}`);
+
+  socket.on("connect", () => {
+    console.log("Connected to server with userId:", userId);
+  });
+
+    socket.on("newOffer", function (data) {
+      console.log("New offer received:", data);
+      const notificationsDiv = document.getElementById("notifications");
+      const notification = document.createElement("p");
+      // Correctly accessing the category and details from the data object
+      notification.textContent = `New offer for your request  '${data.bid}': ${data.comments}`;
+      notificationsDiv.appendChild(notification);
+
+
+      // Increment the notification count
+      const badge = document.getElementById("notificationBadge");
+      let count = parseInt(badge.textContent) || 0;
+      badge.textContent = ++count;
+
+      if (count > 0) {
+        badge.classList.add('show-badge');
+      } else {
+        badge.classList.remove('show-badge');
+      }
+
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const bellIcon = document.querySelector('.bi-bell'); // Adjust the selector if necessary
+      bellIcon.addEventListener('click', function () {
+        const badge = document.getElementById('notificationBadge');
+        badge.classList.remove('show-badge'); // Hide the badge
+        badge.textContent = '0'; // Reset the count, optional based on your needs
+
+        // Here, you might also want to mark notifications as read in your backend or frontend store
+      });
+    });
+
+  </script>
+
 
 <link href="/css/style.css" rel="stylesheet">
 </head>
@@ -62,28 +115,8 @@
             <span class="badge bg-primary badge-number">4</span>
           </a><!-- End Notification Icon -->
 
-          <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-            <li class="dropdown-header">
-              You have 4 new notifications
-              <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
-            <li class="notification-item">
-              <i class="bi bi-exclamation-circle text-warning"></i>
-              <div>
-                <h4>Lorem Ipsum</h4>
-                <p>Quae dolorem earum veritatis oditseno</p>
-                <p>30 min. ago</p>
-              </div>
-            </li>
-
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-
+          <ul id="notifications" class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
+            
           
           </ul><!-- End Notification Dropdown Items -->
 
