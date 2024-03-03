@@ -170,7 +170,8 @@ const renderUploadForm = async (req, res) => {
 // add new request to db
 const getReqPage = async (req, res) => {
   try {
-    res.render("Helpseeker-requestform");
+    const userId = getParameter("helpseekerID");
+    res.render("Helpseeker-requestform",{userId});
   } catch (err) {
     return res.status(err?.status || 500).json({ message: err.message });
   }
